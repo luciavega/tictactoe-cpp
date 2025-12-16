@@ -1,0 +1,15 @@
+# ninja log v7
+73	626	7875763591376499	CMakeFiles/TicTacToe.dir/src/main.cpp.obj	4da99280d4f8f3ad
+80	630	7875763591451502	CMakeFiles/TicTacToe.dir/src/Player.cpp.obj	2c4bc715291551b9
+631	856	7875763596959989	TicTacToe.exe	41dbf6ad427e6503
+67	622	7875765850836508	CMakeFiles/TicTacToe.dir/src/main.cpp.obj	4da99280d4f8f3ad
+623	822	7875765856399097	TicTacToe.exe	41dbf6ad427e6503
+69	670	7875767226975429	CMakeFiles/TicTacToe.dir/src/main.cpp.obj	4da99280d4f8f3ad
+81	721	7875767227092527	CMakeFiles/TicTacToe.dir/src/Player.cpp.obj	2c4bc715291551b9
+751	994	7875767233818879	TicTacToe.exe	41dbf6ad427e6503
+67	649	7875769132868615	CMakeFiles/TicTacToe.dir/src/main.cpp.obj	4da99280d4f8f3ad
+652	812	7875769138711851	TicTacToe.exe	41dbf6ad427e6503
+17	1181	7875776412050678	CMakeFiles/TicTacToe.dir/src/main.cpp.obj	4da99280d4f8f3ad
+1183	1584	7875776423700448	TicTacToe.exe	41dbf6ad427e6503
+9	611	7875779067775409	CMakeFiles/TicTacToe.dir/src/main.cpp.obj	4da99280d4f8f3ad
+612	773	7875779073803423	TicTacToe.exe	41dbf6ad427e6503
