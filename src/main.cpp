@@ -152,6 +152,22 @@ int ask_game_mode() {
     }
 }
 
+bool ask_human_starts() {
+    while (true) {
+        std::cout << "Do you want to start? (y/n): ";
+        char c;
+        std::cin >> c;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        if (c >= 'A' && c <= 'Z') c = c - 'A' + 'a';
+
+        if (c == 'y') return true;
+        if (c == 'n') return false;
+
+        std::cout << "Invalid option. Please type 'y' or 'n'.\n";
+    }
+}
+
 bool ask_play_again() {
     while (true) {
         std::cout << "\nPlay again? (y/n): ";
@@ -220,7 +236,7 @@ void play_game_vs_ai() {
     ai.symbol = ai_symbol;
 
     char board[9] = {'1','2','3','4','5','6','7','8','9'};
-    bool human_turn = true;
+    bool human_turn = ask_human_starts();
 
     while (true) {
         std::cout << "\n";
