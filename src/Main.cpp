@@ -17,7 +17,7 @@ bool is_free_cell(const char board[9], int pos) {
 
 int ask_move_human(const Player& p, const char board[9]) {
     while (true) {
-        std::cout << p.name << " (" << p.symbol << "), elegí una casilla (1-9): ";
+        std::cout << p.name << " (" << p.symbol << "), choose antoher square (1-9): ";
 
         int choice;
         std::cin >> choice;
@@ -25,20 +25,20 @@ int ask_move_human(const Player& p, const char board[9]) {
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Eso no es un numero. Probá de nuevo.\n";
+            std::cout << "This is not a number. Try again.\n";
             continue;
         }
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         if (choice < 1 || choice > 9) {
-            std::cout << "Fuera de rango. Elegí entre 1 y 9.\n";
+            std::cout << "Out of bounds. Choose between 1 y 9.\n";
             continue;
         }
 
         int idx = choice - 1;
         if (!is_free_cell(board, idx)) {
-            std::cout << "Esa casilla ya está ocupada. Elegí otra.\n";
+            std::cout << "That square is already taken. Choose another one.\n";
             continue;
         }
 
@@ -47,7 +47,6 @@ int ask_move_human(const Player& p, const char board[9]) {
 }
 
 int ask_move_ai(const char board[9]) {
-    // juntar todas las casillas libres
     int free_cells[9];
     int count = 0;
 
@@ -57,7 +56,6 @@ int ask_move_ai(const char board[9]) {
         }
     }
 
-    // elegir una al azar
     int choice = rand() % count;
     return free_cells[choice];
 }
@@ -81,7 +79,7 @@ char check_winner_symbol(const char board[9]) {
         char b = board[w[1]];
         char c = board[w[2]];
 
-        if (a >= '1' && a <= '9') continue; // casilla “vacía”
+        if (a >= '1' && a <= '9') continue; 
         if (a == b && b == c) return a;
     }
     return '\0';
@@ -89,10 +87,10 @@ char check_winner_symbol(const char board[9]) {
 
 int ask_game_mode() {
     while (true) {
-        std::cout << "Bienvenido al TicTacToe\n";
-        std::cout << "Elegí un modo de juego:\n";
-        std::cout << "1. Dos jugadores\n";
-        std::cout << "2. Un jugador contra la IA\n";
+        std::cout << "Welcome to TicTacToe\n";
+        std::cout << "Select a game mode:\n";
+        std::cout << "1. Two players\n";
+        std::cout << "2. One player VS IA\n";
         std::cout << "> ";
 
         int mode;
@@ -101,7 +99,7 @@ int ask_game_mode() {
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Eso no es un numero.\n\n";
+            std::cout << "That is not a number.\n\n";
             continue;
         }
 
@@ -114,12 +112,12 @@ int ask_game_mode() {
 }
 
 void play_game_two_players() {
-    std::cout << "\n--- Modo: Dos jugadores ---\n\n";
+    std::cout << "\n--- Mode: Two players ---\n\n";
 
-    std::cout << "Jugador 1:\n";
+    std::cout << "Player 1:\n";
     Player p1 = create_player();
 
-    std::cout << "\nJugador 2:\n";
+    std::cout << "\nPlayer 2:\n";
     Player p2 = create_player_with_symbol(p1.symbol);
 
     char board[9] = {'1','2','3','4','5','6','7','8','9'};
@@ -144,7 +142,7 @@ void play_game_two_players() {
         if (is_board_full(board)) {
             std::cout << "\n";
             draw_game_board(board);
-            std::cout << "\nEmpate 🤝 (match nul)\n";
+            std::cout << "\nTie 🤝 (match nul)\n";
             break;
         }
 
@@ -153,9 +151,9 @@ void play_game_two_players() {
 }
 
 void play_game_vs_ai() {
-    std::cout << "\n--- Modo: Jugador vs IA ---\n\n";
+    std::cout << "\n--- Mode: Player vs IA ---\n\n";
 
-    std::cout << "Jugador:\n";
+    std::cout << "Player:\n";
     Player human = create_player();
 
     char ai_symbol = (human.symbol == 'X') ? 'O' : 'X';
@@ -186,9 +184,9 @@ void play_game_vs_ai() {
             draw_game_board(board);
 
             if (winner == human.symbol) {
-                std::cout << "\nGanaste " << human.name << " 🎉\n";
+                std::cout << "\nYou win " << human.name << " 🎉\n";
             } else {
-                std::cout << "\nGanó la IA 🤖\n";
+                std::cout << "\nAI won 🤖\n";
             }
             break;
         }
@@ -196,7 +194,7 @@ void play_game_vs_ai() {
         if (is_board_full(board)) {
             std::cout << "\n";
             draw_game_board(board);
-            std::cout << "\nEmpate 🤝 (match nul)\n";
+            std::cout << "\nTie 🤝 (match nul)\n";
             break;
         }
 

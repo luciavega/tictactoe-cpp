@@ -4,21 +4,27 @@
 
 static char ask_symbol(char forbidden = '\0') {
     while (true) {
-        std::cout << "Elige un simbolo (un solo caracter, ej: X u O): ";
+        std::cout << "Elige un simbolo (X u O): ";
         char s;
         std::cin >> s;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        if (s == ' ' || s == '\n' || s == '\t') {
-            std::cout << "Simbolo invalido.\n";
+        if (s >= 'a' && s <= 'z') {
+            s = s - 'a' + 'A';
+        }
+
+        if (s != 'X' && s != 'O') {
+            std::cout << "Simbolo invalido. Solo se permite X u O.\n";
             continue;
         }
+
         if (forbidden != '\0' && s == forbidden) {
-            std::cout << "Ese simbolo ya lo usa el otro jugador. Elegí otro.\n";
+            std::cout << "Ese simbolo ya esta en uso. Elegi el otro.\n";
             continue;
         }
+
         return s;
     }
+
 }
 
 static std::string ask_name() {
