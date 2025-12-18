@@ -152,6 +152,23 @@ int ask_game_mode() {
     }
 }
 
+bool ask_play_again() {
+    while (true) {
+        std::cout << "\nPlay again? (y/n): ";
+        char c;
+        std::cin >> c;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        if (c >= 'A' && c <= 'Z') c = c - 'A' + 'a'; // a minúscula
+
+        if (c == 'y') return true;
+        if (c == 'n') return false;
+
+        std::cout << "Invalid option. Please type 'y' or 'n'.\n";
+    }
+}
+
+
 void play_game_two_players() {
     std::cout << "\n--- Mode: Two players ---\n\n";
 
@@ -246,10 +263,15 @@ void play_game_vs_ai() {
 int main() {
     srand(static_cast<unsigned int>(time(nullptr)));
 
-    int mode = ask_game_mode();
+    do {
+        int mode = ask_game_mode();
 
-    if (mode == 1) play_game_two_players();
-    else play_game_vs_ai();
+        if (mode == 1) play_game_two_players();
+        else play_game_vs_ai();
 
+    } while (ask_play_again());
+
+    std::cout << "\nBye!\n";
     return 0;
 }
+
