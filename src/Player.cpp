@@ -7,18 +7,17 @@ static char ask_symbol(char forbidden = '\0') {
         std::cout << "Elige un simbolo (X u O): ";
         char s;
         std::cin >> s;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        if (s >= 'a' && s <= 'z') {
-            s = s - 'a' + 'A';
-        }
+        if (s >= 'a' && s <= 'z') s = s - 'a' + 'A';
 
         if (s != 'X' && s != 'O') {
-            std::cout << "Simbolo invalido. Solo se permite X u O.\n";
+            std::cout << "Simbolo invalido. Solo X u O.\n";
             continue;
         }
 
         if (forbidden != '\0' && s == forbidden) {
-            std::cout << "Ese simbolo ya esta en uso. Elegi el otro.\n";
+            std::cout << "Ese simbolo ya está en uso. Elegí el otro.\n";
             continue;
         }
 
