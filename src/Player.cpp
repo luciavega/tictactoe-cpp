@@ -4,36 +4,40 @@
 
 static char ask_symbol(char forbidden = '\0') {
     while (true) {
-        std::cout << "Elige un simbolo (X u O): ";
+        std::cout << "Choose a symbol (X or O): ";
         char s;
         std::cin >> s;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        if (s >= 'a' && s <= 'z') s = s - 'a' + 'A';
+        // Normalize to uppercase
+        if (s >= 'a' && s <= 'z') {
+            s = s - 'a' + 'A';
+        }
 
         if (s != 'X' && s != 'O') {
-            std::cout << "Simbolo invalido. Solo X u O.\n";
+            std::cout << "Invalid symbol. Please choose X or O.\n";
             continue;
         }
 
         if (forbidden != '\0' && s == forbidden) {
-            std::cout << "Ese simbolo ya está en uso. Elegí el otro.\n";
+            std::cout << "This symbol is already taken. Please choose the other one.\n";
             continue;
         }
 
         return s;
     }
-
 }
 
 static std::string ask_name() {
     std::string name;
-    std::cout << "Nombre del jugador: ";
+    std::cout << "Player name: ";
     std::getline(std::cin, name);
+
     while (name.empty()) {
-        std::cout << "El nombre no puede estar vacio. Probá otra vez: ";
+        std::cout << "Name cannot be empty. Please try again: ";
         std::getline(std::cin, name);
     }
+
     return name;
 }
 

@@ -17,7 +17,7 @@ bool is_free_cell(const char board[9], int pos) {
 
 int ask_move_human(const Player& p, const char board[9]) {
     while (true) {
-        std::cout << p.name << " (" << p.symbol << "), choose another square (1-9): ";
+        std::cout << p.name << " (" << p.symbol << "), choose a square (1-9): ";
 
         int choice;
         std::cin >> choice;
@@ -25,20 +25,20 @@ int ask_move_human(const Player& p, const char board[9]) {
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "This is not a number. Try again.\n";
+            std::cout << "Invalid input. Please enter a number.\n";
             continue;
         }
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         if (choice < 1 || choice > 9) {
-            std::cout << "Out of bounds. Choose between 1 and 9.\n";
+            std::cout << "Invalid position. Choose a number between 1 and 9.\n";
             continue;
         }
 
         int idx = choice - 1;
         if (!is_free_cell(board, idx)) {
-            std::cout << "That square is already taken. Choose another one.\n";
+            std::cout << "This square is already taken. Choose another one.\n";
             continue;
         }
 
@@ -79,24 +79,25 @@ int find_winning_move_for_symbol(const char board[9], char symbol) {
     };
 
     for (const auto& w : wins) {
-        int sym_count = 0;
-        int empty_idx = -1;
+        int symbol_count = 0;
+        int empty_index = -1;
 
         for (int k = 0; k < 3; k++) {
             int idx = w[k];
             char v = board[idx];
 
-            if (v == symbol) sym_count++;
-            else if (v == static_cast<char>('1' + idx)) empty_idx = idx;
+            if (v == symbol) symbol_count++;
+            else if (v == static_cast<char>('1' + idx)) empty_index = idx;
         }
 
-        if (sym_count == 2 && empty_idx != -1) return empty_idx;
+        if (symbol_count == 2 && empty_index != -1) {
+            return empty_index;
+        }
     }
     return -1;
 }
 
 int ask_move_ai_smart(const char board[9], char ai_symbol, char human_symbol) {
-
     int win = find_winning_move_for_symbol(board, ai_symbol);
     if (win != -1) return win;
 
@@ -107,23 +108,29 @@ int ask_move_ai_smart(const char board[9], char ai_symbol, char human_symbol) {
 
     int corners[4] = {0, 2, 6, 8};
     int free_corners[4];
-    int c = 0;
+    int count = 0;
+
     for (int i = 0; i < 4; i++) {
         int idx = corners[i];
         if (board[idx] == static_cast<char>('1' + idx)) {
-            free_corners[c++] = idx;
+            free_corners[count++] = idx;
         }
     }
-    if (c > 0) return free_corners[rand() % c];
+
+    if (count > 0) {
+        return free_corners[rand() % count];
+    }
 
     int free_cells[9];
-    int count = 0;
+    int free_count = 0;
+
     for (int i = 0; i < 9; i++) {
         if (board[i] == static_cast<char>('1' + i)) {
-            free_cells[count++] = i;
+            free_cells[free_count++] = i;
         }
     }
-    return free_cells[rand() % count];
+
+    return free_cells[rand() % free_count];
 }
 
 int ask_game_mode() {
@@ -131,7 +138,7 @@ int ask_game_mode() {
         std::cout << "Welcome to TicTacToe\n";
         std::cout << "Select a game mode:\n";
         std::cout << "1. Two players\n";
-        std::cout << "2. One player VS AI\n";
+        std::cout << "2. Player vs AI\n";
         std::cout << "> ";
 
         int mode;
@@ -140,7 +147,7 @@ int ask_game_mode() {
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "That is not a number.\n\n";
+            std::cout << "Invalid input. Please enter a number.\n\n";
             continue;
         }
 
@@ -175,7 +182,7 @@ bool ask_play_again() {
         std::cin >> c;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        if (c >= 'A' && c <= 'Z') c = c - 'A' + 'a'; // a minúscula
+        if (c >= 'A' && c <= 'Z') c = c - 'A' + 'a';
 
         if (c == 'y') return true;
         if (c == 'n') return false;
@@ -184,9 +191,8 @@ bool ask_play_again() {
     }
 }
 
-
 void play_game_two_players() {
-    std::cout << "\n--- Mode: Two players ---\n\n";
+    std::cout << "\n--- Two Players Mode ---\n\n";
 
     std::cout << "Player 1:\n";
     Player p1 = create_player();
@@ -209,14 +215,14 @@ void play_game_two_players() {
         if (winner != '\0') {
             std::cout << "\n";
             draw_game_board(board);
-            std::cout << "\nWinner: " << (winner == p1.symbol ? p1.name : p2.name) << " 🎉\n";
+            std::cout << "\nWinner: " << (winner == p1.symbol ? p1.name : p2.name) << "\n";
             break;
         }
 
         if (is_board_full(board)) {
             std::cout << "\n";
             draw_game_board(board);
-            std::cout << "\nTie 🤝 (match nul)\n";
+            std::cout << "\nDraw game.\n";
             break;
         }
 
@@ -225,15 +231,14 @@ void play_game_two_players() {
 }
 
 void play_game_vs_ai() {
-    std::cout << "\n--- Mode: Player vs AI ---\n\n";
+    std::cout << "\n--- Player vs AI Mode ---\n\n";
 
     std::cout << "Player:\n";
     Player human = create_player();
 
-    char ai_symbol = (human.symbol == 'X') ? 'O' : 'X';
     Player ai;
     ai.name = "AI";
-    ai.symbol = ai_symbol;
+    ai.symbol = (human.symbol == 'X') ? 'O' : 'X';
 
     char board[9] = {'1','2','3','4','5','6','7','8','9'};
     bool human_turn = ask_human_starts();
@@ -258,9 +263,9 @@ void play_game_vs_ai() {
             draw_game_board(board);
 
             if (winner == human.symbol) {
-                std::cout << "\nYou win " << human.name << " 🎉\n";
+                std::cout << "\nYou win, " << human.name << ".\n";
             } else {
-                std::cout << "\nAI wins 🤖\n";
+                std::cout << "\nAI wins.\n";
             }
             break;
         }
@@ -268,7 +273,7 @@ void play_game_vs_ai() {
         if (is_board_full(board)) {
             std::cout << "\n";
             draw_game_board(board);
-            std::cout << "\nTie 🤝 (match nul)\n";
+            std::cout << "\nDraw game.\n";
             break;
         }
 
@@ -282,12 +287,14 @@ int main() {
     do {
         int mode = ask_game_mode();
 
-        if (mode == 1) play_game_two_players();
-        else play_game_vs_ai();
+        if (mode == 1) {
+            play_game_two_players();
+        } else {
+            play_game_vs_ai();
+        }
 
     } while (ask_play_again());
 
-    std::cout << "\nBye!\n";
+    std::cout << "\nGoodbye !\n";
     return 0;
 }
-
